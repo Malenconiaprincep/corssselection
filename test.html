@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <style>
+      #mousemove-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+      div[contenteditable="true"] {
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div contenteditable="true">
+      <p>
+        I <strong>insist</strong> that you <strong>try</strong> selecting the
+        <strong>strong words</strong>.
+      </p>
+    </div>
+    <div contenteditable="true">
+      <p>
+        I <strong>insist</strong> that you <strong>try</strong> selecting the
+        <strong>strong words</strong>.
+      </p>
+    </div>
+    <div contenteditable="true">
+      <p>
+        I <strong>insist</strong> that you <strong>try</strong> selecting the
+        <strong>strong words</strong>.
+      </p>
+    </div>
+    <div contenteditable="true">fewfewfewwe</div>
+    <div contenteditable="true">fewaewewewee</div>
+    <div contenteditable="true">fewfew</div>
+    <div contenteditable="true">fewweweweew</div>
+    <div contenteditable="true">fewfefewew</div>
+    <div contenteditable="true">fewafewafewewaewew</div>
+    <div contenteditable="true">fewwweweweewweew</div>
+    <script>
+      window.onload = function () {
+        let startRange
+        let endRange
+        const handleMouseMove = (e) => {
+          const dir = "bottom"
+
+          endRange = document.caretRangeFromPoint(e.x, e.y)
+
+          console.log(endRange)
+
+          if (dir === "top") {
+            startRange.setEnd(endRange.endContainer, endRange.endOffset)
+          } else {
+            endRange.setStart(startRange.startContainer, startRange.startOffset)
+          }
+          const selection = window.getSelection()
+          if (selection.rangeCount > 0) {
+            selection.removeAllRanges()
+          }
+
+          if (dir === "top") {
+            selection.addRange(startRange)
+          } else {
+            selection.addRange(endRange)
+          }
+        }
+
+        document.addEventListener("mousedown", function (e) {
+          startRange = document.caretRangeFromPoint(e.clientX, e.clientY)
+          document.addEventListener("mousemove", handleMouseMove)
+        })
+
+        document.addEventListener("mouseup", function (e) {
+          document.removeEventListener("mousemove", handleMouseMove)
+        })
+      }
+    </script>
+  </body>
+</html>
